@@ -33,12 +33,12 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), ListItemListener
                 .observeOn(schedulerProvider.computation())
                 .compose(RxDiffUtil.calculateDiff(ListDiffUtilCallback.Companion::create))
                 .observeOn(schedulerProvider.ui())
-                .doAfterNext {
+                /*.doAfterNext {
                     if (needScroll) {
-                        itemsLayoutManager.scrollToPosition(0)
+                        itemsLayoutManager.smoothScrollToPosition(recyclerView, null, 0)
                         needScroll = false
                     }
-                }
+                }*/
                 .subscribe(listItemsAdapter)
         )
         disposables.add(viewModel.shouldScrollToTop()
@@ -54,7 +54,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), ListItemListener
 
     override fun onSelectBaseCurrency(currencyName: String) {
         viewModel.setBaseCurrency(currencyName)
-//        needScroll = true
     }
 
     override fun onAmountChanged(amount: Double) {

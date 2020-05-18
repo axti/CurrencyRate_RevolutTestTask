@@ -2,8 +2,8 @@ package com.cloverrepublic.revolut.currency.view.listitem
 
 import android.content.Context
 import android.text.Editable
-import android.text.InputType
 import android.text.TextWatcher
+import com.cloverrepublic.revolut.currency.utils.ext.dismissKeyboard
 import kotlinx.android.synthetic.main.base_list_item.view.*
 
 /**
@@ -26,6 +26,10 @@ class BaseCurrencyListItemView(context: Context) : NiceCurrencyListItemView(cont
 
     init {
         currencyRate.isEnabled = true
+        currencyRate.setOnFocusChangeListener { v, hasFocus ->
+            if (!hasFocus)
+                v.dismissKeyboard()
+        }
     }
 
     override fun onAttachedToWindow() {
