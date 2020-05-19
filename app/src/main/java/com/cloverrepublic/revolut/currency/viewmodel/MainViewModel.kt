@@ -5,7 +5,6 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import com.cloverrepublic.revolut.currency.R
 import com.cloverrepublic.revolut.currency.data.ListItemData
-import com.cloverrepublic.revolut.currency.data.ListItemData.Companion.BASE_CURRENCY
 import com.cloverrepublic.revolut.currency.data.ListItemData.Companion.CURRENCY
 import com.cloverrepublic.revolut.currency.data.ListItemData.Companion.ERROR
 import com.cloverrepublic.revolut.currency.data.RatesModel
@@ -59,7 +58,8 @@ class MainViewModel(
                             .setValue(item.value)
                             .setIconId(getIconIdByCurrencyTag(item.name))
                             .setSubTitleId(getSubTitleIdByTag(item.name))
-                            .setType(if (item.isBase) BASE_CURRENCY else CURRENCY)
+                            .setType(CURRENCY)
+                            .setIsBase(item.isBase)
                             .build()
                     })
                     if (currencyChanged) {

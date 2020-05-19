@@ -41,9 +41,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), ListItemListener
                 .observeOn(schedulerProvider.ui())
                 .doAfterNext {
                     if (needScroll) {
-                        Completable.fromAction {
-                            itemsLayoutManager.smoothScrollToPosition(recyclerView, null, 0)
-                        }.delay(100, TimeUnit.MILLISECONDS).subscribe()
+                        recyclerView.scrollToPosition(0)
                         needScroll = false
                     }
                 }

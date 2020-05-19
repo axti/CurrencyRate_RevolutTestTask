@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.cloverrepublic.revolut.currency.data.ListItemData
-import com.cloverrepublic.revolut.currency.data.ListItemData.Companion.BASE_CURRENCY
 import com.cloverrepublic.revolut.currency.data.ListItemData.Companion.CURRENCY
 import com.cloverrepublic.revolut.currency.data.ListItemData.Companion.ERROR
 import com.cloverrepublic.revolut.currency.view.listitem.*
@@ -32,7 +31,6 @@ class RatesAdapter(private val itemListener: ListItemListener) :
             when (viewType) {
                 ERROR -> ErrorListItemView(parent.context)
                 CURRENCY -> NiceCurrencyListItemView(parent.context)
-                BASE_CURRENCY -> BaseCurrencyListItemView(parent.context)
                 else -> throw IllegalStateException("View not implemented yet type = $viewType")
             }
         )
@@ -69,6 +67,9 @@ class RatesAdapter(private val itemListener: ListItemListener) :
 
             if (newData.value != oldData.value) {
                 (holder.itemView as ListItemView).updateValue(newData.value)
+            }
+            if (newData.isBase != oldData.isBase) {
+                (holder.itemView as NiceCurrencyListItemView).updateBase(newData.isBase)
             }
         }
     }

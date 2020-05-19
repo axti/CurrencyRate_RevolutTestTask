@@ -28,10 +28,11 @@ class ListItemData internal constructor(builder: Builder) {
     val type: Int
 
     @Retention
-    @IntDef(ERROR, CURRENCY, BASE_CURRENCY)
+    @IntDef(ERROR, CURRENCY)
     annotation class ItemType
 
     val value: Double?
+    val isBase: Boolean?
 
     init {
         iconId = builder.getIconId()
@@ -40,10 +41,11 @@ class ListItemData internal constructor(builder: Builder) {
         subTitleId = builder.getSubTitleId()
         type = builder.getType()
 
-        if (builder.getValue() == null && type > ERROR) {
+        if ((builder.getValue() == null || builder.isBase() == null) && type > ERROR) {
             throw IllegalArgumentException("ListItemData should have configured value for all currency items")
         }
         value = builder.getValue()
+        isBase = builder.isBase()
     }
 
     override fun equals(other: Any?): Boolean {
@@ -81,6 +83,7 @@ class ListItemData internal constructor(builder: Builder) {
         private var type: Int = 0
 
         private var value: Double? = null
+        private var isBase: Boolean? = null
 
         /**
          * @param iconId have -1 by default
@@ -133,6 +136,15 @@ class ListItemData internal constructor(builder: Builder) {
         }
 
         /**
+         * @param newIsBase setting to set
+         * @return Builder with updated setting
+         */
+        fun setIsBase(newIsBase: Boolean): Builder {
+            isBase = newIsBase
+            return this
+        }
+
+        /**
          * @return a new ListItemData with Builder
          */
         fun build(): ListItemData {
@@ -145,12 +157,12 @@ class ListItemData internal constructor(builder: Builder) {
         fun getSubTitleId() = subTitleId
         fun getType() = type
         fun getValue() = value
+        fun isBase() = isBase
     }
 
     companion object {
         const val ERROR = 0
         const val CURRENCY = 1
-        const val BASE_CURRENCY = 2
         const val NO_RESOURCE = -1
     }
 }

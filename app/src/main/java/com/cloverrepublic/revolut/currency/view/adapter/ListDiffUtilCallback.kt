@@ -19,7 +19,8 @@ class ListDiffUtilCallback(
         oldItems[oldItemPosition].title == newItems[newItemPosition].title
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
-        oldItems[oldItemPosition].value == newItems[newItemPosition].value
+        oldItems[oldItemPosition].value == newItems[newItemPosition].value ||
+                oldItems[oldItemPosition].isBase == newItems[newItemPosition].isBase
 
     override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any? {
         val oldItem = oldItems[oldItemPosition]
