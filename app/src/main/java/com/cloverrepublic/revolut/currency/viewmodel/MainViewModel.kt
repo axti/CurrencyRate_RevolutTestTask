@@ -16,7 +16,6 @@ import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 
-
 /**
  * Created by axti on 05.05.2020.
  */
