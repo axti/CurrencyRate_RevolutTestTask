@@ -18,7 +18,7 @@ class RatesAdapter(private val itemListener: ListItemListener) :
     RecyclerView.Adapter<RatesAdapter.ViewHolder>(),
     Consumer<Pair<List<ListItemData>, DiffUtil.DiffResult?>> {
 
-    private var items: List<ListItemData> = emptyList()
+    private var items: ArrayList<ListItemData> = ArrayList()
 
     init {
         setHasStableIds(true)
@@ -73,20 +73,15 @@ class RatesAdapter(private val itemListener: ListItemListener) :
         }
     }
 
-/*    fun setItems(newItems: List<ListItemData>) {
-        val result = DiffUtil.calculateDiff(ListDiffUtilCallback(this.items, newItems))
-        result.dispatchUpdatesTo(this)
-        this.items.clear()
-        this.items.addAll(newItems)
-    }*/
-
     /**
      * View holder class with one holder for itemView itself.
      */
     inner class ViewHolder(itemView: ListItemView) : RecyclerView.ViewHolder(itemView)
 
     override fun accept(pair: Pair<List<ListItemData>, DiffUtil.DiffResult?>) {
-        items = pair.first
+//        items = pair.first
+        items.clear()
+        items.addAll(pair.first)
         pair.second?.dispatchUpdatesTo(this)
     }
 }

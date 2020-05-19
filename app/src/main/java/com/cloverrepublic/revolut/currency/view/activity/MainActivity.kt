@@ -6,12 +6,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cloverrepublic.revolut.currency.R
 import com.cloverrepublic.revolut.currency.utils.rx.SchedulerProvider
-import com.cloverrepublic.revolut.currency.view.adapter.*
+import com.cloverrepublic.revolut.currency.view.adapter.ListDiffUtilCallback
+import com.cloverrepublic.revolut.currency.view.adapter.ListItemListener
+import com.cloverrepublic.revolut.currency.view.adapter.RatesAdapter
+import com.cloverrepublic.revolut.currency.view.adapter.RxDiffUtil
 import com.cloverrepublic.revolut.currency.viewmodel.MainViewModel
+import io.reactivex.Completable
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
+import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity(R.layout.activity_main), ListItemListener {
     private val disposables = CompositeDisposable()
@@ -20,6 +25,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), ListItemListener
     private lateinit var itemsLayoutManager: LinearLayoutManager
     private var needScroll = false
     private val schedulerProvider: SchedulerProvider by inject()
+    private val transformer = RxDiffUtil.calculateDiff(ListDiffUtilCallback.Companion::create)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,20 +36,22 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), ListItemListener
         super.onResume()
         disposables.add(
             viewModel.getLatestCurrencyList()
-                .observeOn(schedulerProvider.computation())
-                .compose(RxDiffUtil.calculateDiff(ListDiffUtilCallback.Companion::create))
+                .observeOn(schedulerProvider.io())
+                .compose(transformer)
                 .observeOn(schedulerProvider.ui())
-                /*.doAfterNext {
+                .doAfterNext {
                     if (needScroll) {
-                        itemsLayoutManager.smoothScrollToPosition(recyclerView, null, 0)
+                        Completable.fromAction {
+                            itemsLayoutManager.smoothScrollToPosition(recyclerView, null, 0)
+                        }.delay(100, TimeUnit.MILLISECONDS).subscribe()
                         needScroll = false
                     }
-                }*/
+                }
                 .subscribe(listItemsAdapter)
         )
         disposables.add(viewModel.shouldScrollToTop()
             .observeOn(schedulerProvider.ui())
-            .subscribe { needScroll = true}
+            .subscribe { needScroll = true }
         )
     }
 

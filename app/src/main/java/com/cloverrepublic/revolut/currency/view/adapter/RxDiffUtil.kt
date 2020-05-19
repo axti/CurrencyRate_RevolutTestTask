@@ -12,14 +12,15 @@ object RxDiffUtil {
     fun <T> calculateDiff(
         diffCallbacks: (List<T>, List<T>) -> DiffUtil.Callback
     ): FlowableTransformer<List<T>, Pair<List<T>, DiffResult?>> {
-        val initialPair: Pair<List<T>, DiffResult?> = emptyList<T>() to null
+        var initialPair: Pair<List<T>, DiffResult?> = emptyList<T>() to null
         return FlowableTransformer { upstream: Flowable<List<T>> ->
             upstream.scan(initialPair,
                 { (first, _), nextItems ->
                     val callback =
                         diffCallbacks(first, nextItems)
                     val result = DiffUtil.calculateDiff(callback, true)
-                    Pair<List<T>, DiffResult?>(nextItems, result)
+                    initialPair = Pair(nextItems, result)
+                    Pair(nextItems, result)
                 }
             )
                 .skip(1)
