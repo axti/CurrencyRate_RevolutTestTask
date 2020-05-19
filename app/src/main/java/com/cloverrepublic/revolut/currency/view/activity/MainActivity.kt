@@ -1,5 +1,6 @@
 package com.cloverrepublic.revolut.currency.view.activity
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +13,7 @@ import com.cloverrepublic.revolut.currency.view.adapter.RatesAdapter
 import com.cloverrepublic.revolut.currency.view.adapter.RxDiffUtil
 import com.cloverrepublic.revolut.currency.viewmodel.MainViewModel
 import io.reactivex.Completable
+import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.ext.android.inject
@@ -41,7 +43,10 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), ListItemListener
                 .observeOn(schedulerProvider.ui())
                 .doAfterNext {
                     if (needScroll) {
-                        recyclerView.scrollToPosition(0)
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+                            recyclerView.scrollToPosition(0)
+                        else
+                            itemsLayoutManager.smoothScrollToPosition(recyclerView, null, 0)
                         needScroll = false
                     }
                 }
