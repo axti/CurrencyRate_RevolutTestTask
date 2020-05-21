@@ -46,7 +46,6 @@ class RatesAdapter(private val itemListener: ListItemListener) :
     }
 
     override fun onBindViewHolder(holder: RatesAdapter.ViewHolder, position: Int) {
-        Log.d("adapter", "onBindViewHolder")
         (holder.itemView as ListItemView).update(items[position], position)
         holder.itemView.listItemListener = itemListener
     }
@@ -57,10 +56,8 @@ class RatesAdapter(private val itemListener: ListItemListener) :
         payloads: List<Any>
     ) {
         if (payloads.isEmpty()) {
-            Log.d("adapter", "payloads is empty $position")
             super.onBindViewHolder(holder, position, payloads)
         } else {
-            Log.d("adapter", "need to update $position")
             val combinedChange = createCombinedPayload(payloads as List<Change<ListItemData>>)
             val oldData = combinedChange.oldData
             val newData = combinedChange.newData

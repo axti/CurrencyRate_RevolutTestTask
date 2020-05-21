@@ -36,7 +36,6 @@ class RatesApplication : Application() {
     private fun configurePicasso() {
         val builder = Picasso.Builder(this).apply {
             loggingEnabled(BuildConfig.DEBUG)
-            indicatorsEnabled(BuildConfig.DEBUG)
         }
         Picasso.setSingletonInstance(builder.build())
     }
