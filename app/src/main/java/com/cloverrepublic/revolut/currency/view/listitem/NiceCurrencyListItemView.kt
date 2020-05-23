@@ -39,6 +39,7 @@ open class NiceCurrencyListItemView(context: Context) : ListItemView(context) {
             if (!hasFocus)
                 v.dismissKeyboard()
         }
+        updateBase(false)
     }
 
     override fun update(dataItem: ListItemData, position: Int) {

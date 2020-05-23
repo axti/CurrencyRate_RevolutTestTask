@@ -63,8 +63,8 @@ class RatesModelImpl(private val ratesRepository: RatesRepository) : RatesModel 
     }
 
     override fun setBaseCurrency(currency: String) {
-        ratesRepository.setBaseCurrency(currency)
         baseMultiplier = 1.0
+        ratesRepository.setBaseCurrency(currency)
     }
 
     override fun setBaseMultiplier(multiplier: Double) {

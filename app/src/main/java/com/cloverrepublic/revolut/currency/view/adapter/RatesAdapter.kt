@@ -61,12 +61,11 @@ class RatesAdapter(private val itemListener: ListItemListener) :
             val combinedChange = createCombinedPayload(payloads as List<Change<ListItemData>>)
             val oldData = combinedChange.oldData
             val newData = combinedChange.newData
-
-            if (newData.value != oldData.value) {
-                (holder.itemView as ListItemView).updateValue(newData.value)
-            }
             if (newData.isBase != oldData.isBase) {
                 (holder.itemView as NiceCurrencyListItemView).updateBase(newData.isBase)
+            }
+            if (newData.value != oldData.value) {
+                (holder.itemView as ListItemView).updateValue(newData.value)
             }
         }
     }
